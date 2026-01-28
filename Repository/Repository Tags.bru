@@ -7,3 +7,34 @@ meta {
 get {
   url: {{baseUrl}}/repos/usebruno/bruno/tags
 }
+
+tests {
+  test("should return 200 OK", function() {
+    expect(res.status).to.equal(200);
+  });
+
+  test("should return array of tags", function() {
+    expect(res.body).to.be.an('array');
+    expect(res.body.length).to.be.greaterThan(0);
+  });
+
+  test("each tag should have required fields", function() {
+    const tag = res.body[0];
+    expect(tag).to.have.property('name');
+    expect(tag).to.have.property('commit');
+    expect(tag).to.have.property('zipball_url');
+    expect(tag).to.have.property('tarball_url');
+  });
+
+  test("tag names should follow version format", function() {
+    const tag = res.body[0];
+    expect(tag.name).to.match(/^v?\d+\.\d+\.\d+/);
+  });
+
+  test("commit should have sha and url", function() {
+    const tag = res.body[0];
+    expect(tag.commit).to.have.property('sha');
+    expect(tag.commit).to.have.property('url');
+    expect(tag.commit.sha).to.have.lengthOf(40);
+  });
+}

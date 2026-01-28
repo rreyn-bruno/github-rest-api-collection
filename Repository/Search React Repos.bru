@@ -15,3 +15,27 @@ params:query {
   order: desc
   per_page: 10
 }
+
+tests {
+  test("should return 200 OK", function() {
+    expect(res.status).to.equal(200);
+  });
+
+  test("should return search results", function() {
+    expect(res.body.items).to.be.an('array');
+    expect(res.body.items.length).to.be.greaterThan(0);
+  });
+
+  test("repositories should be sorted by stars descending", function() {
+    const items = res.body.items;
+    if (items.length > 1) {
+      for (let i = 0; i < items.length - 1; i++) {
+        expect(items[i].stargazers_count).to.be.greaterThanOrEqual(items[i + 1].stargazers_count);
+      }
+    }
+  });
+
+  test("should have valid GitHub API response headers", function() {
+    expect(res.headers['content-type']).to.include('application/json');
+  });
+}

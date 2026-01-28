@@ -9,3 +9,40 @@ get {
   body: none
   auth: none
 }
+
+tests {
+  test("should return 200 OK", function() {
+    expect(res.status).to.equal(200);
+  });
+
+  test("should return repository details", function() {
+    expect(res.body).to.have.property('id');
+    expect(res.body).to.have.property('name');
+    expect(res.body).to.have.property('full_name');
+  });
+
+  test("should have correct repository name", function() {
+    expect(res.body.name).to.equal('bruno-website');
+    expect(res.body.full_name).to.equal('usebruno/bruno-website');
+  });
+
+  test("should have owner information", function() {
+    expect(res.body.owner).to.be.an('object');
+    expect(res.body.owner.login).to.equal('usebruno');
+    expect(res.body.owner).to.have.property('id');
+    expect(res.body.owner).to.have.property('avatar_url');
+  });
+
+  test("should have repository metadata", function() {
+    expect(res.body).to.have.property('created_at');
+    expect(res.body).to.have.property('updated_at');
+    expect(res.body).to.have.property('stargazers_count');
+    expect(res.body).to.have.property('watchers_count');
+    expect(res.body).to.have.property('forks_count');
+  });
+
+  test("should have valid URLs", function() {
+    expect(res.body.html_url).to.include('github.com');
+    expect(res.body.clone_url).to.include('.git');
+  });
+}

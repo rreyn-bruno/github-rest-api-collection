@@ -10,7 +10,43 @@ get {
 }
 
 tests {
-  test("status must be 200", function() {
-    expect(res.status).to.eql(201);
+  test("should return 200 OK", function() {
+    expect(res.status).to.equal(200);
+  });
+
+  test("should return user information", function() {
+    expect(res.body).to.have.property('login');
+    expect(res.body).to.have.property('id');
+    expect(res.body).to.have.property('avatar_url');
+    expect(res.body).to.have.property('type');
+  });
+
+  test("should have correct username", function() {
+    expect(res.body.login).to.equal('usebruno');
+  });
+
+  test("user type should be valid", function() {
+    expect(['User', 'Organization']).to.include(res.body.type);
+  });
+
+  test("should have profile URLs", function() {
+    expect(res.body).to.have.property('html_url');
+    expect(res.body.html_url).to.include('github.com/usebruno');
+  });
+
+  test("should have public repository count", function() {
+    expect(res.body).to.have.property('public_repos');
+    expect(res.body.public_repos).to.be.a('number');
+    expect(res.body.public_repos).to.be.greaterThanOrEqual(0);
+  });
+
+  test("should have follower information", function() {
+    expect(res.body).to.have.property('followers');
+    expect(res.body).to.have.property('following');
+  });
+
+  test("should have account creation date", function() {
+    expect(res.body).to.have.property('created_at');
+    expect(new Date(res.body.created_at)).to.be.instanceOf(Date);
   });
 }

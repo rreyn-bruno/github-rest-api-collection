@@ -5,7 +5,7 @@ meta {
 }
 
 get {
-  url: {{baseUrl}}/search/repositories?q=bruno&order=desc&per_page=10
+  url: {{baseUrl}}/search/repositories?q=bruno&order=desc&per_page=11
   body: none
   auth: none
 }
@@ -13,5 +13,41 @@ get {
 params:query {
   q: bruno
   order: desc
-  per_page: 10
+  per_page: 11
+}
+
+tests {
+  test("should return 200 OK", function() {
+    expect(res.status).to.equal(200);
+  });
+
+  test("should have search results structure", function() {
+    expect(res.body).to.have.property('total_count');
+    expect(res.body).to.have.property('incomplete_results');
+    expect(res.body).to.have.property('items');
+  });
+
+  test("should return array of repositories", function() {
+    expect(res.body.items).to.be.an('array');
+    expect(res.body.items.length).to.be.greaterThan(0);
+  });
+
+  test("should respect per_page limit", function() {
+    expect(res.body.items.length).to.be.lessThanOrEqual(11);
+  });
+
+  test("each repository should have required fields", function() {
+    const repo = res.body.items[0];
+    expect(repo).to.have.property('id');
+    expect(repo).to.have.property('name');
+    expect(repo).to.have.property('full_name');
+    expect(repo).to.have.property('owner');
+    expect(repo).to.have.property('html_url');
+    expect(repo).to.have.property('description');
+    expect(repo).to.have.property('stargazers_count');
+  });
+
+  test("response time should be reasonable", function() {
+    expect(res.responseTime).to.be.lessThan(3000);
+  });
 }

@@ -13,3 +13,44 @@ get {
 params:query {
   q: is:issue repo:usebruno/bruno
 }
+
+tests {
+  test("should return 200 OK", function() {
+    expect(res.status).to.equal(200);
+  });
+
+  test("should have search results structure", function() {
+    expect(res.body).to.have.property('total_count');
+    expect(res.body).to.have.property('incomplete_results');
+    expect(res.body).to.have.property('items');
+  });
+
+  test("should return array of issues", function() {
+    expect(res.body.items).to.be.an('array');
+  });
+
+  test("each issue should have required fields", function() {
+    if (res.body.items.length > 0) {
+      const issue = res.body.items[0];
+      expect(issue).to.have.property('id');
+      expect(issue).to.have.property('number');
+      expect(issue).to.have.property('title');
+      expect(issue).to.have.property('state');
+      expect(issue).to.have.property('user');
+      expect(issue).to.have.property('created_at');
+      expect(issue).to.have.property('updated_at');
+    }
+  });
+
+  test("issue state should be valid", function() {
+    if (res.body.items.length > 0) {
+      const issue = res.body.items[0];
+      expect(['open', 'closed']).to.include(issue.state);
+    }
+  });
+
+  test("total count should be a number", function() {
+    expect(res.body.total_count).to.be.a('number');
+    expect(res.body.total_count).to.be.greaterThanOrEqual(0);
+  });
+}
