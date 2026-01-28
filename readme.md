@@ -26,10 +26,10 @@ This collection includes comprehensive tests for all API endpoints.
 npm install -g @usebruno/cli
 
 # Run all tests
-bru run --env Github
+bru run --env Prod
 
 # Run with detailed output
-bru run --env Github --output results.json --format json
+bru run --env Prod --output results.json --format json
 ```
 
 **Option 2: Using npm scripts**

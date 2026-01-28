@@ -28,11 +28,11 @@ jobs:
         run: npm install -g @usebruno/cli
 
       - name: Run Bruno tests (JSON output)
-        run: bru run --env Github --output results.json --format json
+        run: bru run --env Prod --output results.json --format json
         continue-on-error: true
 
       - name: Run Bruno tests (JUnit output)
-        run: bru run --env Github --output test-results.xml --format junit
+        run: bru run --env Prod --output test-results.xml --format junit
         continue-on-error: true
 
       - name: Display test results
