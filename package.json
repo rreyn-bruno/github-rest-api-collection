@@ -4,8 +4,9 @@
   "description": "Bruno API collection for GitHub REST API with automated tests",
   "scripts": {
     "test": "bru run --env Github",
-    "test:verbose": "bru run --env Github --output results.json --format json",
-    "test:reporter": "bru run --env Github --reporter junit --output test-results/"
+    "test:json": "bru run --env Github --output results.json --format json",
+    "test:junit": "bru run --env Github --output test-results.xml --format junit",
+    "test:html": "bru run --env Github --output test-results.html --format html"
   },
   "keywords": [
     "bruno",

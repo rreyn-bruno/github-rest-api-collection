@@ -40,11 +40,14 @@ npm install
 # Run tests
 npm test
 
-# Run with verbose output
-npm run test:verbose
+# Run with JSON output
+npm run test:json
 
-# Generate JUnit report
-npm run test:reporter
+# Generate JUnit XML report
+npm run test:junit
+
+# Generate HTML report
+npm run test:html
 ```
 
 ### Automated Testing with GitHub Actions

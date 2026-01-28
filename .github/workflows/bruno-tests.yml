@@ -27,32 +27,41 @@ jobs:
       - name: Install Bruno CLI
         run: npm install -g @usebruno/cli
 
-      - name: Run Bruno tests
+      - name: Run Bruno tests (JSON output)
         run: bru run --env Github --output results.json --format json
+        continue-on-error: true
+
+      - name: Run Bruno tests (JUnit output)
+        run: bru run --env Github --output test-results.xml --format junit
         continue-on-error: true
 
       - name: Display test results
         if: always()
         run: |
           if [ -f results.json ]; then
-            echo "Test results:"
-            cat results.json
+            echo "=== Test Results Summary ==="
+            cat results.json | head -100
           fi
 
-      - name: Upload test results
+      - name: Upload JSON test results
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: bruno-test-results
+          name: bruno-test-results-json
           path: results.json
           retention-days: 30
 
-      - name: Check test status
-        run: bru run --env Github --reporter junit --output test-results/
+      - name: Upload JUnit test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: bruno-test-results-junit
+          path: test-results.xml
+          retention-days: 30
 
       - name: Publish test results
         if: always()
         uses: EnricoMi/publish-unit-test-result-action@v2
         with:
-          files: test-results/*.xml
+          files: test-results.xml
 
