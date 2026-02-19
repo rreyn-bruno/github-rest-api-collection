@@ -37,4 +37,32 @@ tests {
     expect(tag.commit).to.have.property('url');
     expect(tag.commit.sha).to.have.lengthOf(40);
   });
+
+  test("all tags should have valid download URLs", function() {
+    res.body.forEach(tag => {
+      expect(tag.zipball_url).to.include('github.com');
+      expect(tag.tarball_url).to.include('github.com');
+      expect(tag.zipball_url).to.include('zipball');
+      expect(tag.tarball_url).to.include('tarball');
+    });
+  });
+
+  test("commit SHA should be valid hex string", function() {
+    const tag = res.body[0];
+    expect(tag.commit.sha).to.match(/^[a-f0-9]{40}$/);
+  });
+
+  test("should have node_id for each tag", function() {
+    const tag = res.body[0];
+    expect(tag).to.have.property('node_id');
+    expect(tag.node_id).to.be.a('string');
+  });
+
+  test("response time should be reasonable", function() {
+    expect(res.responseTime).to.be.lessThan(2000);
+  });
+
+  test("should have valid GitHub API response headers", function() {
+    expect(res.headers['content-type']).to.include('application/json');
+  });
 }

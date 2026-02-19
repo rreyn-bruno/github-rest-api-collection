@@ -15,3 +15,56 @@ params:query {
   order: desc
   per_page: 15
 }
+
+tests {
+  test("should return 200 OK", function() {
+    expect(res.status).to.equal(200);
+  });
+
+  test("should have search results structure", function() {
+    expect(res.body).to.have.property('total_count');
+    expect(res.body).to.have.property('incomplete_results');
+    expect(res.body).to.have.property('items');
+  });
+
+  test("should return array of repositories", function() {
+    expect(res.body.items).to.be.an('array');
+    expect(res.body.items.length).to.be.greaterThan(0);
+  });
+
+  test("should respect per_page limit", function() {
+    expect(res.body.items.length).to.be.lessThanOrEqual(15);
+  });
+
+  test("each repository should have required fields", function() {
+    const repo = res.body.items[0];
+    expect(repo).to.have.property('id');
+    expect(repo).to.have.property('name');
+    expect(repo).to.have.property('full_name');
+    expect(repo).to.have.property('owner');
+    expect(repo).to.have.property('html_url');
+    expect(repo).to.have.property('stargazers_count');
+  });
+
+  test("repositories should be sorted by stars descending", function() {
+    const items = res.body.items;
+    if (items.length > 1) {
+      for (let i = 0; i < items.length - 1; i++) {
+        expect(items[i].stargazers_count).to.be.greaterThanOrEqual(items[i + 1].stargazers_count);
+      }
+    }
+  });
+
+  test("should have valid GitHub API response headers", function() {
+    expect(res.headers['content-type']).to.include('application/json');
+  });
+
+  test("response time should be reasonable", function() {
+    expect(res.responseTime).to.be.lessThan(3000);
+  });
+
+  test("total count should be a positive number", function() {
+    expect(res.body.total_count).to.be.a('number');
+    expect(res.body.total_count).to.be.greaterThan(0);
+  });
+}

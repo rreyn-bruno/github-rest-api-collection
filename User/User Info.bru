@@ -49,4 +49,40 @@ tests {
     expect(res.body).to.have.property('created_at');
     expect(new Date(res.body.created_at)).to.be.instanceOf(Date);
   });
+
+  test("should have updated date", function() {
+    expect(res.body).to.have.property('updated_at');
+    expect(new Date(res.body.updated_at)).to.be.instanceOf(Date);
+  });
+
+  test("should have valid avatar URL", function() {
+    expect(res.body.avatar_url).to.include('https://');
+    expect(res.body.avatar_url).to.be.a('string');
+  });
+
+  test("should have node_id", function() {
+    expect(res.body).to.have.property('node_id');
+    expect(res.body.node_id).to.be.a('string');
+  });
+
+  test("should have API URLs", function() {
+    expect(res.body).to.have.property('repos_url');
+    expect(res.body).to.have.property('events_url');
+    expect(res.body.repos_url).to.include('api.github.com');
+  });
+
+  test("follower counts should be non-negative", function() {
+    expect(res.body.followers).to.be.a('number');
+    expect(res.body.followers).to.be.greaterThanOrEqual(0);
+    expect(res.body.following).to.be.a('number');
+    expect(res.body.following).to.be.greaterThanOrEqual(0);
+  });
+
+  test("response time should be reasonable", function() {
+    expect(res.responseTime).to.be.lessThan(2000);
+  });
+
+  test("should have valid GitHub API response headers", function() {
+    expect(res.headers['content-type']).to.include('application/json');
+  });
 }

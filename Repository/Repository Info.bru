@@ -45,4 +45,38 @@ tests {
     expect(res.body.html_url).to.include('github.com');
     expect(res.body.clone_url).to.include('.git');
   });
+
+  test("metadata counts should be non-negative numbers", function() {
+    expect(res.body.stargazers_count).to.be.a('number');
+    expect(res.body.stargazers_count).to.be.greaterThanOrEqual(0);
+    expect(res.body.watchers_count).to.be.a('number');
+    expect(res.body.watchers_count).to.be.greaterThanOrEqual(0);
+    expect(res.body.forks_count).to.be.a('number');
+    expect(res.body.forks_count).to.be.greaterThanOrEqual(0);
+  });
+
+  test("should have valid date formats", function() {
+    expect(new Date(res.body.created_at)).to.be.instanceOf(Date);
+    expect(new Date(res.body.updated_at)).to.be.instanceOf(Date);
+    expect(new Date(res.body.pushed_at)).to.be.instanceOf(Date);
+  });
+
+  test("should have visibility and privacy information", function() {
+    expect(res.body).to.have.property('private');
+    expect(res.body.private).to.be.a('boolean');
+    expect(res.body).to.have.property('visibility');
+  });
+
+  test("should have language information", function() {
+    expect(res.body).to.have.property('language');
+  });
+
+  test("should have default branch", function() {
+    expect(res.body).to.have.property('default_branch');
+    expect(res.body.default_branch).to.be.a('string');
+  });
+
+  test("response time should be reasonable", function() {
+    expect(res.responseTime).to.be.lessThan(2000);
+  });
 }

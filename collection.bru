@@ -1,0 +1,139 @@
+docs {
+  # GitHub REST API Collection
+  
+  A comprehensive Bruno API collection for testing and exploring the GitHub REST API.
+  This collection provides ready-to-use requests for common GitHub API endpoints with
+  built-in tests and assertions.
+  
+  ## 📋 Overview
+  
+  This collection demonstrates Bruno's capabilities while providing practical examples
+  of interacting with GitHub's REST API. It includes requests for repository searches,
+  user information, and repository details, all with comprehensive test coverage.
+  
+  ## 🚀 Quick Start
+  
+  1. **Open in Bruno**: Clone this repository and open the folder in Bruno
+  2. **Select Environment**: Choose the "Prod" environment (uses api.github.com)
+  3. **Run Requests**: Execute any request to interact with GitHub's API
+  4. **View Tests**: Check the test results to see API response validations
+  
+  ## 📁 Collection Structure
+  
+  ### Repository Endpoints
+  - **Search Repos**: General repository search with customizable parameters
+  - **Repository Info**: Get detailed information about a specific repository
+  - **Repository Tags**: Retrieve all tags for a repository
+  - **Search Issues**: Search for issues within a repository
+  - **Language-Specific Searches**: Pre-configured searches for popular languages:
+    - JavaScript, TypeScript, React, NextJS
+    - Java, Golang, Rust
+  
+  ### User Endpoints
+  - **User Info**: Get detailed information about a GitHub user/organization
+  - **User Repos**: List all repositories for a specific user
+  
+  ## 🌍 Environments
+  
+  - **Prod**: Production environment pointing to https://api.github.com
+  - **Staging**: Staging environment (if applicable)
+  
+  ### Environment Variables
+  - `baseUrl`: The base URL for GitHub API (https://api.github.com)
+  - `API_key`: (Optional) GitHub personal access token for authenticated requests
+  
+  ## 🧪 Testing
+  
+  Every request includes comprehensive tests that validate:
+  - HTTP status codes (200 OK expected)
+  - Response structure and required fields
+  - Data types and formats
+  - Business logic (e.g., repository ownership, valid URLs)
+  - Performance (response time < 2000ms)
+  
+  ### Running Tests
+  
+  **Via Bruno GUI**: Click "Run" on any request or folder to execute tests
+  
+  **Via CLI**:
+  ```bash
+  # Install Bruno CLI
+  npm install -g @usebruno/cli
+  
+  # Run all tests
+  bru run --env Prod
+  
+  # Run with JSON output
+  bru run --env Prod --output results.json --format json
+  ```
+  
+  **Via npm scripts**:
+  ```bash
+  npm install
+  npm test              # Run all tests
+  npm run test:json     # Generate JSON report
+  npm run test:junit    # Generate JUnit XML report
+  npm run test:html     # Generate HTML report
+  ```
+  
+  ## 🔐 Authentication
+  
+  Most endpoints in this collection work without authentication. However, GitHub's API
+  has rate limits for unauthenticated requests (60 requests/hour).
+  
+  To increase rate limits (5000 requests/hour):
+  1. Create a GitHub Personal Access Token
+  2. Add it to the environment's `API_key` secret variable
+  3. Update requests to use bearer token authentication
+  
+  ## 📊 CI/CD Integration
+  
+  This collection includes GitHub Actions workflow for automated testing:
+  - Runs on every push and pull request
+  - Daily scheduled runs to catch API changes
+  - Generates test reports and artifacts
+  - Can be triggered manually
+  
+  See `.github/workflows/` for workflow configuration.
+  
+  ## 🛠️ Customization
+  
+  ### Adding New Requests
+  1. Create a new `.bru` file in the appropriate folder
+  2. Use the Bruno GUI or copy an existing request as a template
+  3. Add tests to validate the response
+  
+  ### Modifying Search Parameters
+  All search requests use query parameters that can be customized:
+  - `q`: Search query
+  - `order`: Sort order (desc/asc)
+  - `per_page`: Number of results (max 100)
+  - `sort`: Sort field (stars, forks, updated, etc.)
+  
+  ## 📚 Resources
+  
+  - **GitHub REST API Docs**: https://docs.github.com/en/rest
+  - **Bruno Documentation**: https://docs.usebruno.com
+  - **Bruno GitHub**: https://github.com/usebruno/bruno
+  
+  ## 🤝 Contributing
+  
+  Contributions are welcome! Feel free to:
+  - Add new endpoints
+  - Improve existing tests
+  - Fix bugs or issues
+  - Enhance documentation
+  
+  ## 📝 Notes
+  
+  - All requests use the public GitHub API (no authentication required by default)
+  - Rate limits apply: 60 requests/hour (unauthenticated), 5000/hour (authenticated)
+  - Response times may vary based on GitHub's API performance
+  - Some tests validate specific repositories (usebruno/bruno, usebruno/bruno-website)
+  
+  ## 🏷️ Version
+  
+  Collection Version: 1.0.0
+  Bruno Format Version: 1
+  Last Updated: 2026-02-19
+}

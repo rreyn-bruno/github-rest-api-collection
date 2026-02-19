@@ -48,4 +48,48 @@ tests {
     const repo = res.body[0];
     expect(repo.html_url).to.include('github.com/usebruno');
   });
+
+  test("repositories should have timestamps", function() {
+    const repo = res.body[0];
+    expect(repo).to.have.property('created_at');
+    expect(repo).to.have.property('updated_at');
+    expect(new Date(repo.created_at)).to.be.instanceOf(Date);
+    expect(new Date(repo.updated_at)).to.be.instanceOf(Date);
+  });
+
+  test("repositories should have statistics", function() {
+    const repo = res.body[0];
+    expect(repo).to.have.property('stargazers_count');
+    expect(repo).to.have.property('watchers_count');
+    expect(repo).to.have.property('forks_count');
+    expect(repo.stargazers_count).to.be.a('number');
+    expect(repo.stargazers_count).to.be.greaterThanOrEqual(0);
+  });
+
+  test("repositories should have description field", function() {
+    const repo = res.body[0];
+    expect(repo).to.have.property('description');
+  });
+
+  test("repositories should have default branch", function() {
+    const repo = res.body[0];
+    expect(repo).to.have.property('default_branch');
+    expect(repo.default_branch).to.be.a('string');
+  });
+
+  test("owner should have complete information", function() {
+    const repo = res.body[0];
+    expect(repo.owner).to.have.property('login');
+    expect(repo.owner).to.have.property('id');
+    expect(repo.owner).to.have.property('avatar_url');
+    expect(repo.owner).to.have.property('type');
+  });
+
+  test("response time should be reasonable", function() {
+    expect(res.responseTime).to.be.lessThan(2000);
+  });
+
+  test("should have valid GitHub API response headers", function() {
+    expect(res.headers['content-type']).to.include('application/json');
+  });
 }

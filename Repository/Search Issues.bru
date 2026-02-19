@@ -53,4 +53,46 @@ tests {
     expect(res.body.total_count).to.be.a('number');
     expect(res.body.total_count).to.be.greaterThanOrEqual(0);
   });
+
+  test("issue should have valid URLs", function() {
+    if (res.body.items.length > 0) {
+      const issue = res.body.items[0];
+      expect(issue).to.have.property('html_url');
+      expect(issue.html_url).to.include('github.com');
+      expect(issue.html_url).to.include('/issues/');
+    }
+  });
+
+  test("issue user should have required fields", function() {
+    if (res.body.items.length > 0) {
+      const issue = res.body.items[0];
+      expect(issue.user).to.have.property('login');
+      expect(issue.user).to.have.property('id');
+      expect(issue.user).to.have.property('avatar_url');
+    }
+  });
+
+  test("issue dates should be valid", function() {
+    if (res.body.items.length > 0) {
+      const issue = res.body.items[0];
+      expect(new Date(issue.created_at)).to.be.instanceOf(Date);
+      expect(new Date(issue.updated_at)).to.be.instanceOf(Date);
+    }
+  });
+
+  test("issue should have labels array", function() {
+    if (res.body.items.length > 0) {
+      const issue = res.body.items[0];
+      expect(issue).to.have.property('labels');
+      expect(issue.labels).to.be.an('array');
+    }
+  });
+
+  test("response time should be reasonable", function() {
+    expect(res.responseTime).to.be.lessThan(3000);
+  });
+
+  test("should have valid GitHub API response headers", function() {
+    expect(res.headers['content-type']).to.include('application/json');
+  });
 }
